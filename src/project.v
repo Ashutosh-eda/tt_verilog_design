@@ -4,24 +4,52 @@
  */
 
 `default_nettype none
-
-module tt_um_example (
-    input  wire [7:0] ui_in,    // Dedicated inputs
-    output wire [7:0] uo_out,   // Dedicated outputs
-    input  wire [7:0] uio_in,   // IOs: Input path
-    output wire [7:0] uio_out,  // IOs: Output path
-    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-    input  wire       clk,      // clock
-    input  wire       rst_n     // reset_n - low to reset
+module comparator(input clk,en,
+    input [31:0] x1,
+    input [31:0] x2,
+    input [31:0] x3,
+    input [31:0] x4,
+    input [31:0] x5,
+    output reg p1,
+    output reg p2,
+    output reg p3,
+    output reg p4,
+    output reg p5
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+always @(posedge clk) begin
+if (en) begin
+    if (x1 > x2 && x1 > x3 && x1 > x4 && x1 > x5) begin
+        p1 = 1;
+    end else begin
+        p1 = 0;
+    end
 
-  // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+    if (x2 > x1 && x2 > x3 && x2 > x4 && x2 > x5) begin
+        p2 = 1;
+    end else begin
+        p2 = 0;
+    end
 
+    if (x3 > x1 && x3 > x2 && x3 > x4 && x3 > x5) begin
+        p3 = 1;
+    end else begin
+        p3 = 0;
+    end
+
+    if (x4 > x1 && x4 > x2 && x4 > x3 && x4 > x5) begin
+        p4 = 1;
+    end else begin
+        p4 = 0;
+    end
+
+    if (x5 > x1 && x5 > x2 && x5 > x3 && x5 > x4) begin
+        p5 = 1;
+    end else begin
+        p5 = 0;
+    end
+end
+end
 endmodule
+
+
